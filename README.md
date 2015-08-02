@@ -1,4 +1,3 @@
-password-generator
-==================
+# Password generator
 
-one file html password generator
+Minimalistic static html with password generator embeded
