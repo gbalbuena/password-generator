@@ -42,67 +42,70 @@
 
           <p><input type="checkbox" name="punc" checked> No Punction Marks</p>
           <p><input type="checkbox" name="randomlength"> Random Length (6 - 12)</p>
-          <p><input type="button" class="btn" value="Generate Password " onClick="GeneratePassword()"></p>
+          <p><input type="button" class="btn" value="Generate Password " onClick="PasswordGenerator.getPassword()"></p>
         </form>
       </div>
     </div>
   </div>
 
   <script>
-  function GeneratePassword() {
-    if (parseInt(navigator.appVersion) <= 3) {
-      alert("Sorry this only works in 4.0+ browsers");
-      return true;
+  var PasswordGenerator = (function(){
+
+    function getRandomNum() {
+      var random = Math.random() // between 0 - 1
+      random = parseInt(random * 1000); // rndNum from 0 - 1000
+      random = (random % 94) + 33; // rndNum from 33 - 127
+      return random;
     }
 
-    var length = 8;
-    var password = "";
-    length = document.form1.passwordlength.options[document.form1.passwordlength.selectedIndex].value;
-
-    var noPunction = (document.form1.punc.checked);
-    var randomLength = (document.form1.randomlength.checked);
-
-    if (randomLength) {
-      length = Math.random();
-      length = parseInt(length * 100);
-      length = (length % 7) + 6
+    function checkPunc(num) {
+      if ((num >=  33) && (num <=  47)) { return true; }
+      if ((num >=  58) && (num <=  64)) { return true; }
+      if ((num >=  91) && (num <=  96)) { return true; }
+      if ((num >= 123) && (num <= 126)) { return true; }
+      return false;
     }
 
-    for (i=0; i < length; i++) {
-      n = getRandomNum();
-      if (noPunction) {
-        while (checkPunc(n)) {
-          n = getRandomNum();
-        }
+    var getPassword = function() {
+      if (parseInt(navigator.appVersion) <= 3) {
+        alert("Sorry this only works in 4.0+ browsers");
+        return true;
       }
-      password = password + String.fromCharCode(n);
-    }
-    document.form1.password.value = password
-    return true;
-  }
 
-  function getRandomNum() {
-    var random = Math.random() // between 0 - 1
-    random = parseInt(random * 1000); // rndNum from 0 - 1000
-    random = (random % 94) + 33; // rndNum from 33 - 127
-    return random;
-  }
+      var length = 8;
+      var password = "";
+      length = document.form1.passwordlength.options[document.form1.passwordlength.selectedIndex].value;
 
-  function checkPunc(num) {
-    if ((num >=33) && (num <=47)) {
+      var noPunction = (document.form1.punc.checked);
+      var randomLength = (document.form1.randomlength.checked);
+
+      if (randomLength) {
+        length = Math.random();
+        length = parseInt(length * 100);
+        length = (length % 7) + 6
+      }
+
+      for (i=0; i < length; i++) {
+        n = getRandomNum();
+        if (noPunction) {
+          while (checkPunc(n)) {
+            n = getRandomNum();
+          }
+        }
+        password = password + String.fromCharCode(n);
+      }
+      document.form1.password.value = password
       return true;
     }
-    if ((num >=58) && (num <=64)) {
-      return true;
+
+    return {
+      getPassword: getPassword
     }
-    if ((num >=91) && (num <=96)) {
-      return true;
-    }
-    if ((num >=123) && (num <=126)) {
-      return true;
-    }
-    return false;
-  }
+
+  }());
+  
+
+  
   </script>
   <script src="https://code.jquery.com/jquery.js"></script>
   <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.1/js/bootstrap.min.js"></script>
